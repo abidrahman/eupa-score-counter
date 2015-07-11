@@ -1,6 +1,7 @@
 package com.example.android.eupascorecounter;
 
 
+        import android.content.Intent;
         import android.os.Bundle;
         import android.support.v7.app.AppCompatActivity;
         import android.view.Menu;
@@ -13,19 +14,17 @@ package com.example.android.eupascorecounter;
  */
 public class MainActivity extends AppCompatActivity {
 
-    // Tracks the score for Team A
+    // Tracks the score for home team.
     int homeScore = 0;
 
-    // Tracks the score for Team B
+    // Tracks the score for away team.
     int awayScore = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String jamesbond = "hi";
-        String jamesBond = "hello";
-        String s = jamesBond + jamesbond;
+
     }
 
     @Override
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     /**
      * Increase the score for the Home Team by 1 point.
      */
@@ -57,7 +57,14 @@ public class MainActivity extends AppCompatActivity {
         homeScore = homeScore + 1;
         displayForTeamA(homeScore);
     }
+    /**
+     * Goes to the timer screen when timeout is clicked.
+     */
 
+    public void timeout(View v) {
+        Intent intent = new Intent(v.getContext(), timer.class);
+        startActivityForResult(intent, 0);
+    }
 
     /**
      * Increase the score for the Away Team by 1 point.

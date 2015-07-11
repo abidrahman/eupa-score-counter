@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/EUPAScoreCounter.iml" filepath="$PROJECT_DIR$/EUPAScoreCounter.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eupa-score-counter.iml" filepath="$PROJECT_DIR$/eupa-score-counter.iml" />
     </modules>
   </component>
 </project>
