@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     // Tracks the score for away team.
     int awayScore = 0;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,16 +51,41 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Goes to the timer screen when it is halftime (first to 8 points).
+     */
+    int a = 1;
+    public void halftime(int awayScore,int homeScore,View v) {
+        this.awayScore = awayScore;
+        this.homeScore = homeScore;
+        if (((homeScore == 8 && awayScore < 8) || (awayScore == 8 && homeScore < 8)) && a == 1) {
+            Intent intent = new Intent(this, timer.class);
+            startActivityForResult(intent, 0);
+            a = 2;
+
+        }
+    }
 
     /**
-     * Increase the score for the Home Team by 1 point.
+     * Goes to the GameOver screen once a team reaches 15 points, also resets the score.
      */
-    public void addOneForHome(View v) {
-        homeScore = homeScore + 1;
-        displayForTeamA(homeScore);
+
+
+    public void gameOver(int awayScore,int homeScore,View v) {
+        this.awayScore = awayScore;
+        this.homeScore = homeScore;
+        if (((homeScore == 15 && awayScore < 14) || (awayScore == 15 && homeScore < 14)) && a == 2) {
+            Intent intent = new Intent(this, gameover.class);
+            startActivityForResult(intent, 0);
+            a = 3;
+            resetScore(v);
+
+        }
     }
+
+
     /**
-     * Goes to the timer screen when timeout is clicked.
+     * Goes to the timer screen.
      */
 
     public void timeout(View v) {
@@ -67,11 +94,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Increase the score for the Home Team by 1 point.
+     */
+    public void addOneForHome(View v) {
+        homeScore = homeScore + 1;
+        displayForTeamA(homeScore);
+        halftime(awayScore, homeScore, v);
+        gameOver(awayScore,homeScore,v);
+    }
+
+
+    /**
      * Increase the score for the Away Team by 1 point.
      */
     public void addOneForAway(View v) {
         awayScore = awayScore + 1;
         displayForTeamB(awayScore);
+        halftime(awayScore,homeScore,v);
+        gameOver(awayScore,homeScore,v);
     }
 
     /**
@@ -82,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         awayScore = 0;
         displayForTeamA(homeScore);
         displayForTeamB(awayScore);
+        a = 1;
     }
 
     /**
