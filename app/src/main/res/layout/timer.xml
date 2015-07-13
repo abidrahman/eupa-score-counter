@@ -9,11 +9,11 @@
         android:id="@+id/timerValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="80sp"
-        android:textColor="#ffff8807"
-            android:layout_above="@+id/stopButton"
+        android:textSize="65dp"
+        android:textColor="#ffffae30"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="117dp" />
+            android:layout_marginBottom="117dp"
+            android:layout_marginTop="100dp" />
 
         <Button
         android:id="@+id/stopButton"
@@ -26,12 +26,15 @@
             android:text="Back to Score!" />
 
     <TextView
-        android:id="@+id/event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:text=""
+        android:id="@+id/text"
+        android:textColor="#ffffae30"
+        android:textStyle="bold"
+        android:textSize="35dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp" />
+        android:layout_marginTop="250dp" />
 
 
 </RelativeLayout>

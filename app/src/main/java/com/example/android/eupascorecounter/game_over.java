@@ -21,9 +21,17 @@ public class game_over extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_over);
         String winner = getIntent().getExtras().getString("winner");
+        int wscore = getIntent().getExtras().getInt("wscore");
+        int lscore = getIntent().getExtras().getInt("lscore");
         showWinningTeam(winner);
+        showFinalScore(wscore,lscore);
 
 
+    }
+
+    private void showFinalScore(int wscore, int lscore) {
+        TextView scoreView = (TextView) findViewById(R.id.finalScore);
+        scoreView.setText(String.valueOf(wscore) + " - " + String.valueOf(lscore));
     }
 
     public void showWinningTeam(String winner) {

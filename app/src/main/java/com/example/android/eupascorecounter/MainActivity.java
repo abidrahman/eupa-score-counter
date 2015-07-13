@@ -27,7 +27,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Tracks whether or not we have had halftime.
     boolean htime = false;
-    public TextView t;
+
+    // Tracks whether or not timeout has been taken per half for each team.
+    boolean Atime1 = false;
+    boolean Atime2 = false;
+    boolean Htime1 = false;
+    boolean Htime2 = false;
 
 
     @Override
@@ -63,12 +68,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Goes to the timer screen when it is halftime (first to 8 points).
      */
-
     public void halftime(int awayScore, int homeScore, View v) {
         this.awayScore = awayScore;
         this.homeScore = homeScore;
         if (((homeScore == 8 && awayScore < 8) || (awayScore == 8 && homeScore < 8)) && !htime) {
-            Intent intent = new Intent(this, timer.class);
+            Intent intent = new Intent(v.getContext(), timer.class);
+            intent.putExtra("text", "Halftime!");
+            intent.putExtra("time", 600000);
             startActivityForResult(intent, 0);
             htime = true;
 
@@ -76,26 +82,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Goes to the GameOver screen once a team reaches 15 points, also resets the score.
+     * Goes to the GameOver screen once a team reaches 15 points, also resets the score and sends the winner to the GameOver screen.
      */
-
-
-
     public void gameOver(int awayScore, int homeScore, View v) {
         this.awayScore = awayScore;
         this.homeScore = homeScore;
 
 
-        if (homeScore == 15 && awayScore < 14) {
+        if ((homeScore == 15 && awayScore < 14) || (awayScore > 13 && homeScore == awayScore + 2)) {
             Intent intent = new Intent(v.getContext(), game_over.class);
             intent.putExtra("winner","Home Team Wins!");
+            intent.putExtra("wscore",homeScore);
+            intent.putExtra("lscore",awayScore);
             startActivityForResult(intent, 0);
             resetScore(v);
 
 
-        } else if (awayScore == 15 && homeScore < 14) {
+        } else if ((awayScore == 15 && homeScore < 14) || (homeScore > 13 && awayScore == homeScore + 2)) {
             Intent intent = new Intent(v.getContext(), game_over.class);
             intent.putExtra("winner", "Away Team Wins!");
+            intent.putExtra("lscore",homeScore);
+            intent.putExtra("wscore",awayScore);
             startActivityForResult(intent, 0);
             resetScore(v);
 
@@ -103,14 +110,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks and executes timer screen depending on whether or not timeout has been taken. (Away Team)
+     */
+    public void timeoutA(View v) {
+        if (!htime && !Atime1) {
+            Intent intent = new Intent(v.getContext(), timer.class);
+            intent.putExtra("text", "Away Team Timeout!");
+            intent.putExtra("time", 70000);
+            startActivityForResult(intent, 0);
+            Atime1 = true;
+        } else if (htime && !Atime2) {
+            Intent intent = new Intent(v.getContext(), timer.class);
+            intent.putExtra("text", "Away Team Timeout!");
+            intent.putExtra("time", 70000);
+            startActivityForResult(intent, 0);
+            Atime2 = true;
+        } else {
+            TextView scoreView = (TextView) findViewById(R.id.liveText);
+            scoreView.setText(String.valueOf("Away Timeout Already Taken!"));
+        }
+
+    }
 
     /**
-     * Goes to the timer screen.
+     * Checks and executes timer screen depending on whether or not timeout has been taken. (Home Team)
      */
+    public void timeoutH(View v) {
+        if (!htime && !Htime1) {
+            Intent intent = new Intent(v.getContext(), timer.class);
+            intent.putExtra("text", "Home Team Timeout!");
+            intent.putExtra("time", 70000);
+            startActivityForResult(intent, 0);
+            Htime1 = true;
+        } else if (htime && !Htime2) {
+            Intent intent = new Intent(v.getContext(), timer.class);
+            intent.putExtra("text", "Home Team Timeout!");
+            intent.putExtra("time", 70000);
+            startActivityForResult(intent, 0);
+            Htime2 = true;
+        } else {
+            TextView scoreView = (TextView) findViewById(R.id.liveText);
+            scoreView.setText(String.valueOf("Home Timeout Already Taken!"));
+        }
 
-    public void timeout(View v) {
-        Intent intent = new Intent(v.getContext(), timer.class);
-        startActivityForResult(intent, 0);
     }
 
     /**
@@ -122,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
         halftime(awayScore, homeScore, v);
         gameOver(awayScore, homeScore, v);
     }
-
 
     /**
      * Increase the score for the Away Team by 1 point.
@@ -142,21 +184,31 @@ public class MainActivity extends AppCompatActivity {
         awayScore = 0;
         displayForTeamA(homeScore);
         displayForTeamB(awayScore);
+        TextView scoreView = (TextView) findViewById(R.id.liveText);
+        scoreView.setText(String.valueOf("Welcome to the Game!"));
         htime = false;
+        Atime1 = false;
+        Atime2 = false;
+        Htime1 = false;
+        Htime2 = false;
     }
 
     /**
-     * Displays the given score for Team A.
+     * Displays the given score for Team A and updates LiveText.
      */
     public void displayForTeamA(int score) {
+        TextView liveText = (TextView) findViewById(R.id.liveText);
+        liveText.setText(String.valueOf("Home Team Scores!"));
         TextView scoreView = (TextView) findViewById(R.id.home_score);
         scoreView.setText(String.valueOf(score));
     }
 
     /**
-     * Displays the given score for Team B.
+     * Displays the given score for Team B and updates LiveText.
      */
     public void displayForTeamB(int score) {
+        TextView liveText = (TextView) findViewById(R.id.liveText);
+        liveText.setText(String.valueOf("Away Team Scores!"));
         TextView scoreView = (TextView) findViewById(R.id.away_score);
         scoreView.setText(String.valueOf(score));
     }

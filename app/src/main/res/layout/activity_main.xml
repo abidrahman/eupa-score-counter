@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -62,7 +63,7 @@
                     android:layout_marginLeft="28dp"
                     android:layout_marginRight="28dp"
                     android:text="Timeout"
-                    android:onClick="timeout"/>
+                    android:onClick="timeoutH"/>
 
             </LinearLayout>
 
@@ -117,12 +118,24 @@
                     android:layout_marginLeft="28dp"
                     android:layout_marginRight="28dp"
                     android:text="Timeout"
-                    android:onClick="timeout"/>
+                    android:onClick="timeoutA"/>
                 </LinearLayout>
 
         </LinearLayout>
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to the game!"
+        android:id="@+id/liveText"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.18"
+        android:textColor="#ffffae30"
+        android:textStyle="bold"
+        android:textSize="22.5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="400dp" />
 
     <Button
         android:layout_width="200dp"
@@ -130,9 +143,9 @@
         android:onClick="resetScore"
         android:text="Reset"
         android:id="@+id/reset"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="20dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
 
 
-</LinearLayout>
+</RelativeLayout>
