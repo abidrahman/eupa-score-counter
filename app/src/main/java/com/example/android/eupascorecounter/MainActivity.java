@@ -1,12 +1,16 @@
 package com.example.android.eupascorecounter;
 
 
+        import android.app.Fragment;
+        import android.content.Context;
         import android.content.Intent;
         import android.os.Bundle;
         import android.support.v7.app.AppCompatActivity;
+        import android.view.LayoutInflater;
         import android.view.Menu;
         import android.view.MenuItem;
         import android.view.View;
+        import android.view.ViewGroup;
         import android.widget.TextView;
 
 /**
@@ -14,12 +18,16 @@ package com.example.android.eupascorecounter;
  */
 public class MainActivity extends AppCompatActivity {
 
+
     // Tracks the score for home team.
     int homeScore = 0;
 
     // Tracks the score for away team.
     int awayScore = 0;
 
+    // Tracks whether or not we have had halftime.
+    boolean htime = false;
+    public TextView t;
 
 
     @Override
@@ -51,17 +59,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     /**
      * Goes to the timer screen when it is halftime (first to 8 points).
      */
-    int a = 1;
-    public void halftime(int awayScore,int homeScore,View v) {
+
+    public void halftime(int awayScore, int homeScore, View v) {
         this.awayScore = awayScore;
         this.homeScore = homeScore;
-        if (((homeScore == 8 && awayScore < 8) || (awayScore == 8 && homeScore < 8)) && a == 1) {
+        if (((homeScore == 8 && awayScore < 8) || (awayScore == 8 && homeScore < 8)) && !htime) {
             Intent intent = new Intent(this, timer.class);
             startActivityForResult(intent, 0);
-            a = 2;
+            htime = true;
 
         }
     }
@@ -71,14 +80,25 @@ public class MainActivity extends AppCompatActivity {
      */
 
 
-    public void gameOver(int awayScore,int homeScore,View v) {
+
+    public void gameOver(int awayScore, int homeScore, View v) {
         this.awayScore = awayScore;
         this.homeScore = homeScore;
-        if (((homeScore == 15 && awayScore < 14) || (awayScore == 15 && homeScore < 14)) && a == 2) {
-            Intent intent = new Intent(this, gameover.class);
+
+
+        if (homeScore == 15 && awayScore < 14) {
+            Intent intent = new Intent(v.getContext(), game_over.class);
+            intent.putExtra("winner","Home Team Wins!");
             startActivityForResult(intent, 0);
-            a = 3;
             resetScore(v);
+
+
+        } else if (awayScore == 15 && homeScore < 14) {
+            Intent intent = new Intent(v.getContext(), game_over.class);
+            intent.putExtra("winner", "Away Team Wins!");
+            startActivityForResult(intent, 0);
+            resetScore(v);
+
 
         }
     }
@@ -100,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         homeScore = homeScore + 1;
         displayForTeamA(homeScore);
         halftime(awayScore, homeScore, v);
-        gameOver(awayScore,homeScore,v);
+        gameOver(awayScore, homeScore, v);
     }
 
 
@@ -110,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
     public void addOneForAway(View v) {
         awayScore = awayScore + 1;
         displayForTeamB(awayScore);
-        halftime(awayScore,homeScore,v);
-        gameOver(awayScore,homeScore,v);
+        halftime(awayScore, homeScore, v);
+        gameOver(awayScore, homeScore, v);
     }
 
     /**
@@ -122,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         awayScore = 0;
         displayForTeamA(homeScore);
         displayForTeamB(awayScore);
-        a = 1;
+        htime = false;
     }
 
     /**
@@ -140,4 +160,6 @@ public class MainActivity extends AppCompatActivity {
         TextView scoreView = (TextView) findViewById(R.id.away_score);
         scoreView.setText(String.valueOf(score));
     }
+
+
 }
